@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+/* gallery */
+.row.gallery img {
+	margin-bottom: 10px;
+}
+
+.modal-header, .modal-header.h4, .modal-header.close {
+	background-color: #5cb85c;
+	color: white !important;
+	text-align: center;
+	font-size: 30px;
+}
+.modal-footer {
+	background-color: #f9f9f9;
+}
