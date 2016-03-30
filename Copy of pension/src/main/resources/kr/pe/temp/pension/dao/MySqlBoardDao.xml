@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.pe.temp.pension.dao.BoardDao">
+	<resultMap type="board" id="boardResultMap">
+		<id column="num" property="num" />
+		<result column="dpassword" property="dpwd" />
+		<result column="title" property="title" />
+		<result column="bname" property="bname" />
+		<result column="content" property="content" />
+		<result column="dob" property="dob" />
+		<result column="pic" property="pic" />
+		<result column="pictype" property="pictype" />
+		<result column="bsection" property="bsection" />
+		<result column="bcount" property="bcount" />
+		<result column="cname" property="cname" />
+		<result column="cpassword" property="cpwd" />
+		<result column="commant" property="commant" />
+		<result column="cdob" property="cdob" />
+	</resultMap>
+
+	<select id="selectList" parameterType="map" resultMap="boardResultMap">
+		select
+		num, title, bname, dob, bcount
+		from board
+		where bsection=#{type}
+		order by
+		num desc
+		limit #{beginIndex}, 10
+	</select>
+
+	<select id="selectBoard" parameterType="int" resultMap="boardResultMap">
+		select
+		num, title, bname, dob, bcount, content, pic
+		from board
+		where num=#{num}
+	</select>
+
+	<insert id="insertBoard" parameterType="board">
+		insert into board (num,
+		dpassword, title, bname, content, dob, pic, pictype, bsection, bcount)
+		values (null, #{dpwd}, #{title}, #{bname}, #{content}, now(), #{pic},
+		#{pictype}, #{bsection}, 0);
+	</insert>
+
+	<delete id="deleteBoard" parameterType="board">
+		delete from board where
+		num=#{num} and dpassword=#{dpwd}
+	</delete>
+
+	<update id="updateCount" parameterType="int">
+		update board
+		set bcount =
+		bcount+1
+		where num= #{num}
+	</update>
+
+	<select id="selectTotalCount" resultType="int">
+		select count(num) from
+		board where bsection=#{bsection}
+	</select>
+
+	<select id="udtselectBoard" parameterType="board" resultMap="boardResultMap">
+		select num, title, bname, content, pic
+		from board
+		where num=#{num} and
+		dpassword=#{dpwd}
+	</select>
+
+	<update id="updateBoard" parameterType="board">
+		update board
+		set
+		title=#{title},
+		content=#{content},
+		pic=#{pic}
+		where num=#{num};
+	</update>
+	
+	<!-- <select id="currentNum" parameterType="board">
+	    select count(num)
+		from board
+		where num<#{num} and bsection=#{bsection};
+	</select> -->
+	
+	<select id="threePageNum" parameterType="board">
+		select num
+		from board
+		where bsection=#{bsection}
+		limit #{currentIndex-1}, 3;
+	</select>
+
+	<!-- 댓글 -->
+	<select id="selectComment" parameterType="int" resultMap="boardResultMap">
+		select
+		cnum
+		from bcomment
+		where cnum=#{cnum}
+	</select>
+
+	<select id="selectCoTotalCount" resultType="int">
+		select count(num)
+		from
+		bcomment where num=#{num}
+	</select>
+
+	<select id="selectCoList" parameterType="map" resultMap="boardResultMap">
+		select
+		cnum, cname, commant, cdob
+		from bcomment
+		where num=#{num}
+		order by
+		cdob
+		desc
+		limit #{beginIndex}, 10;
+	</select>
+
+	<insert id="insertComment" parameterType="board">
+		insert into bcomment
+		(num, cnum, cname, cpassword, commant, cdob)
+		values(#{num}, null,
+		#{cname}, #{cpwd}, #{commant}, now());
+	</insert>
+
+	<delete id="deleteComment" parameterType="board">
+		delete from bcomment
+		where
+		cnum=#{cnum} and cpassword=#{cpwd}
+	</delete>
+
+	<select id="udtCommentSelect" parameterType="board" resultMap="boardResultMap">
+		select cnum, commant
+		from bcomment
+		where cnum=#{cnum} and cpassword=#{cpwd};
+	</select>
+
+	<update id="updateComment" parameterType="board">
+		update bcomment
+		set
+		commant=#{commant}
+		where cnum=#{cnum};
+	</update>
+</mapper>

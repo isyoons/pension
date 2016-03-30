@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.pe.temp.pension.dao.ReservationDao">
+	<resultMap type="resveStatusInfo" id="resveStatusInfoMap">
+		<result column="roomCode" property="roomCode" />
+		<result column="resveDay" property="resveDay" javaType="java.util.Date" />
+		<result column="resveStatus" property="resveStatus" />
+	</resultMap>
+
+	<resultMap type="reservation" id="resveResultMap">
+		<result column="resveCode" property="resveCode" />
+		<result column="resveCtm" property="resveCtm" />
+		<result column="payCtm" property="payCtm" />
+		<result column="phoneNumber" property="phoneNumber" />
+		<result column="resveDay" property="resveDay" />
+		<result column="resvePd" property="resvePd" />
+		<result column="totalResveNum" property="totalResveNum" />
+		<result column="payAmount" property="payAmount" />
+		<result column="isDeposit" property="isDeposit" />
+		<result column="etc" property="etc" />
+	</resultMap>
+
+	<resultMap type="resveRoomInfo" id="resveRoomInfoResultMap">
+		<result column="resveCode" property="resveCode" />
+		<result column="roomCode" property="roomCode" />
+		<result column="roomName" property="roomName" />
+		<result column="resveNum" property="resveNum" />
+		<result column="resvePd" property="resvePd" />
+		<result column="stayStartDay" property="stayStartDay" />
+		<result column="stayEndDay" property="stayEndDay" />
+	</resultMap>
+
+	<select id="selectListResveStatus" parameterType="map"
+		resultMap="resveStatusInfoMap">
+		select
+		roomCode,resveDay,resveStatus
+		from resveStatusInfo
+		where roomCode=#{roomCode} and resveDay between #{beginDate} and
+		#{endDate}
+	</select>
+
+	<select id="selectListResveStatusOneday" parameterType="map"
+		resultMap="resveStatusInfoMap">
+		select
+		roomCode,resveDay,resveStatus
+		from resveStatusInfo
+		where roomCode=#{roomCode} and resveDay = #{oneDay}
+	</select>
+
+	<insert id="insertResveInfo" parameterType="reservation">
+		insert into
+		resveInfo
+		( resveCode , resveCtm , payCtm ,
+		phoneNumber,
+		resveDay, resvePd,
+		totalResveNum, payAmount, isDeposit, etc)
+		values
+		(null,
+		#{resveCtm},
+		#{payCtm},
+		#{phoneNumber},
+		#{resveDay}, #{resvePd},
+		#{totalResveNum},
+		#{payAmount},
+		#{isDeposit},
+		#{etc})
+	</insert>
+
+	<insert id="insertResveRoomInfo" parameterType="resveRoomInfo">
+		insert into
+		resveRoomInfo ( resveCode , roomCode, roomName , resveNum ,
+		resvePd,
+		stayBeginDay, stayEndDay)
+		values
+		(#{resveCode}, #{roomCode},
+		#{roomName},
+		#{resveNum},
+		#{resvePd},
+		#{stayBeginDay}, #{stayEndDay})
+	</insert>
+
+	<select id="selectMaxResveCode" resultType="int">
+		select max(resveCode)
+		from resveInfo;
+	</select>
+
+	<select id="selectResveInfo" parameterType="String" resultMap="resveResultMap">
+		select * from resveInfo where phoneNumber=#{phoneNumber}
+	</select>
+
+	<select id="selectResveRoomInfo" parameterType="int"
+		resultMap="resveRoomInfoResultMap">
+		select * from resveRoomInfo where resveCode=#{resveCode}
+	</select>
+
+	<select id="selectResveInfo2" parameterType="int" resultMap="resveResultMap">
+		select * from resveInfo where resveCode=#{resveCode}
+	</select>
+
+	<delete id="deleteResveInfo" parameterType="int">
+		delete from resveInfo
+		where resveCode=#{resveCode}
+	</delete>
+
+	<delete id="deleteResveRoomInfo" parameterType="int">
+		delete from
+		resveRoomInfo
+		where resveCode=#{resveCode}
+	</delete>
+
+	<delete id="deleteResveStatusInfo" parameterType="int">
+		delete from
+		resveStatusInfo where roomCode in(
+		select * from (
+		select aaa.roomCode
+		from resveRoomInfo aaa, resveStatusInfo bbb
+		where
+		resveCode=#{resveCode} and resveDay between stayBeginDay and
+		stayEndDay)
+		as temp);
+	</delete>
+
+	<insert id="insertResveStatusInfo" parameterType="resveStatusInfo">
+		insert into
+		resveStatusInfo ( resveDay , roomCode , resveStatus)
+		values
+		(#{resveDay},
+		#{roomCode},
+		#{resveStatus})
+	</insert>
+
+</mapper>

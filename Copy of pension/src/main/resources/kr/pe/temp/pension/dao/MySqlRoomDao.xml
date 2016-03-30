@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.pe.temp.pension.dao.RoomDao">
+	<resultMap type="Room" id="roomResultMap">
+		<id column="roomCode" property="roomCode" />
+		<result column="roomName" property="roomName" />
+		<result column="stdNum" property="stdNum" />
+		<result column="maxNum" property="maxNum" />
+		<result column="lowSeasonWeekdayPrice" property="lowSeasonWeekdayPrice" />
+		<result column="lowSeasonFridayPrice" property="lowSeasonFridayPrice" />
+		<result column="lowSeasonWeekendPrice" property="lowSeasonWeekendPrice" />
+		<result column="middleSeasonWeekdayPrice" property="middleSeasonWeekdayPrice" />
+		<result column="middleSeasonWeekendPrice" property="middleSeasonWeekendPrice" />
+		<result column="highSeasonWeekdayPrice" property="highSeasonWeekdayPrice" />
+		<result column="highSeasonWeekendPrice" property="highSeasonWeekendPrice" />
+		<result column="coupleRoom" property="coupleRoom" />
+		<result column="doubleLayer" property="doubleLayer" />
+		<result column="spa" property="spa" />
+		<result column="equipment" property="equipment" />
+	</resultMap>
+	<select id="selectList" resultMap="roomResultMap">
+		select
+		roomCode,roomName,stdNum,maxNum,lowSeasonWeekdayPrice,lowSeasonFridayPrice,lowSeasonWeekendPrice,middleSeasonWeekdayPrice,middleSeasonWeekendPrice,highSeasonWeekdayPrice,highSeasonWeekendPrice,coupleRoom,doubleLayer,spa,equipment
+		from roomInfo
+	</select>
+	<select id="selectOne" parameterType="String" resultMap="roomResultMap">
+		select
+		roomCode,roomName,stdNum,maxNum,lowSeasonWeekdayPrice,lowSeasonFridayPrice,lowSeasonWeekendPrice,middleSeasonWeekdayPrice,middleSeasonWeekendPrice,highSeasonWeekdayPrice,highSeasonWeekendPrice,coupleRoom,doubleLayer,spa,equipment
+		from roomInfo
+		where roomCode = #{roomCode}
+	</select>
+	<select id="selectRoomImg" parameterType="String" resultType="String">
+		select
+		roomImg
+		from roomImgInfo
+		where roomCode = #{roomCode}
+	</select>
+	<update id="updateRoomInfo" parameterType="Room">
+		update roomInfo
+		set
+		roomName=#{roomName},
+		stdNum=#{stdNum},
+		maxNum=#{maxNum},
+		lowSeasonWeekdayPrice=#{lowSeasonWeekdayPrice},
+		lowSeasonFridayPrice=#{lowSeasonFridayPrice},
+		lowSeasonWeekendPrice=#{lowSeasonWeekendPrice},
+		middleSeasonWeekdayPrice=#{middleSeasonWeekdayPrice},
+		middleSeasonWeekendPrice=#{middleSeasonWeekendPrice},
+		highSeasonWeekdayPrice=#{highSeasonWeekdayPrice},
+		highSeasonWeekendPrice=#{highSeasonWeekendPrice},
+		highSeasonWeekdayPrice=#{highSeasonWeekdayPrice},
+		coupleRoom=#{coupleRoom},
+		doubleLayer=#{doubleLayer},
+		spa=#{spa},
+		equipment=#{equipment}
+		where roomCode = #{roomCode}
+	</update>
+	<insert id="insertRoomImg" parameterType="RoomImgInfo">
+		insert into roomImgInfo
+		values(#{roomCode},#{roomImg})
+	</insert>
+	<insert id="insertRoom" parameterType="Room">
+		insert into roomInfo
+		values(#{roomCode},#{roomName},#{stdNum},#{maxNum},#{coupleRoom},#{doubleLayer},#{spa},#{lowSeasonWeekdayPrice},#{lowSeasonFridayPrice},#{lowSeasonWeekendPrice},#{middleSeasonWeekdayPrice},#{middleSeasonWeekendPrice},#{highSeasonWeekdayPrice},#{highSeasonWeekendPrice},#{equipment})
+	</insert>
+	<delete id="deleteRoomImg" parameterType="roomImgInfo">
+		delete from roomImgInfo
+		where roomImg=#{roomImg} and roomCode=#{roomCode}
+	</delete>
+	<delete id="deleteRoom" parameterType="String">
+		delete from roomInfo
+		where
+		roomCode=#{roomCode}
+	</delete>
+	<delete id="deleteRoomImgforRoomCode" parameterType="String">
+		delete from
+		roomImgInfo
+		where roomCode=#{roomCode}
+	</delete>
+</mapper>

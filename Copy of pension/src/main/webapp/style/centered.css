@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+/* http://webdesign.tutsplus.com/ko/tutorials/the-holy-grail-of-css-centering--cms-22114 */
+
+.container {
+	width: 100%;
+	height: 100%;
+	margin: 50px auto;
+}
+
+.outer {
+	display: table;
+	width: 100%;
+	height: 100%;
+}
+
+.inner {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.centered {
+	position: relative;
+	display: inline-block;
+	width: 50%;
+	padding: 1em;
+}
