@@ -3,14 +3,14 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'war'
 
 compileJava.options.encoding = 'UTF-8'
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 version = '1.0'
 
 eclipse {
 	wtp {
 		facet {
 			facet name: 'jst.web', version: '3.0' // Servlet Spec Version 지정
-			facet name: 'jst.java', version: '1.7' // Java Version 지정, 1.7 ...
+			facet name: 'jst.java', version: '1.8' // Java Version 지정, 1.8 ...
 		}
 	}
 }
@@ -37,7 +37,7 @@ dependencies {
 	compile 'jstl:jstl:1.2'
 	compile 'org.reflections:reflections:0.9.9-RC1'
 	compile 'log4j:log4j:1.2.17'
-	compile 'mysql:mysql-connector-java:5.1.30'
+	compile 'mysql:mysql-connector-java:8.0.21'
 	compile 'org.mybatis:mybatis:3.2.6'
 	compile 'org.springframework:spring-context:4.0.4.RELEASE'
 	compile group: 'commons-collections',
